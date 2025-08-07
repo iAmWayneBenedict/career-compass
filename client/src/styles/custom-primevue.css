@@ -1,0 +1,19 @@
+@layer base {
+  /* START - Message */
+  .p-message-text {
+    @apply !text-xs;
+  }
+  /* END - Message */
+
+  /* START - Button */
+  .p-button {
+    @apply !rounded-xl;
+  }
+  /* END - Button */
+
+  /* START - Input */
+  .p-inputtext {
+    @apply !rounded-xl;
+  }
+  /* END - Input */
+}

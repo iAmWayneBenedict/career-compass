@@ -6,11 +6,7 @@ import type { Router, NavigationGuardNext, RouteLocationNormalized } from 'vue-r
 export function setupRouterGuards(router: Router) {
   // Global before guard
   router.beforeEach(
-    async (
-      to: RouteLocationNormalized,
-      from: RouteLocationNormalized,
-      next: NavigationGuardNext,
-    ) => {
+    async (to: RouteLocationNormalized, _: RouteLocationNormalized, next: NavigationGuardNext) => {
       const authStore = useAuthStore()
       const meta = to.meta as CustomRouteMeta
 
@@ -39,8 +35,8 @@ export function setupRouterGuards(router: Router) {
       }
 
       // Validate user role
-      if (to.meta.requiredRole) {
-        if (authStore.user.role !== to.meta.requiredRole) {
+      if (meta.requiredRole) {
+        if (authStore.user.role !== meta.requiredRole) {
           next({ name: 'unauthorized' })
           return
         }
@@ -52,15 +48,16 @@ export function setupRouterGuards(router: Router) {
 
   // Global after guard
   router.afterEach((to, from, failure) => {
+    const meta = to.meta as CustomRouteMeta
     // Update page title
-    if (to.meta.title) {
-      document.title = `${to.meta.title} - Career Compass`
+    if (meta.title) {
+      document.title = `${meta.title} - Career Compass`
     }
 
     // Track page views (analytics)
     // if (window.gtag && !failure) {
     //   gtag('config', 'GA_MEASUREMENT_ID', {
-    //     page_title: to.meta.title || to.name,
+    //     page_title: meta.title || to.name,
     //     page_location: window.location.href,
     //   })
     // }

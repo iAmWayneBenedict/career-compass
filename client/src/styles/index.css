@@ -1,15 +1,15 @@
 @import url('https://fonts.googleapis.com/css2?family=Geist:wght@100..900&display=swap');
 
+/* ** Always on top ** */
 @import 'tailwindcss';
 @import 'tailwindcss-primeui';
 @custom-variant dark (&:where(.my-app-dark, .my-app-dark *));
 
-@theme {
-  --font-sans: 'Geist', sans-serif;
-}
+/* Override Primevue Themes */
+@import './custom-primevue.css';
 
-@layer base {
-  body {
-    @apply font-sans;
-  }
-}
+/* Custom Tailwind Theme */
+@import './tailwind-theme.css';
+
+/* Define Default Styles */
+@import './defaults.css';
