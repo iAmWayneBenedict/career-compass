@@ -8,11 +8,13 @@ import type { SocialProvider } from '@/types/auth'
 import { reactive, ref } from 'vue'
 
 const form = reactive({
+  name: '',
   email: '',
   password: '',
 })
 
 const errors = reactive({
+  name: '',
   email: '',
   password: '',
 })
@@ -29,9 +31,9 @@ const socialProviders: SocialProvider[] = [
 
 const footerLinks = [
   {
-    text: "Don't have an account?",
-    label: 'Register',
-    to: '/auth/register',
+    text: 'Already have an account?',
+    label: 'Login',
+    to: '/auth/login',
   },
 ]
 
@@ -49,9 +51,9 @@ const handleSocialLogin = (provider: string) => {
 <template>
   <AuthLayout>
     <AuthForm
-      title="Welcome Back"
-      subtitle="Log in with your Google account"
-      submit-label="Login"
+      title="Welcome"
+      subtitle="Register with your Google account"
+      submit-label="Register"
       :loading="isLoading"
       :social-providers="socialProviders"
       divider-text="Or continue with"
@@ -59,6 +61,14 @@ const handleSocialLogin = (provider: string) => {
       @social-login="handleSocialLogin"
     >
       <template #fields>
+        <InputFormField
+          id="name"
+          label="Name"
+          v-model="form.name"
+          placeholder="Example Name"
+          :has-error="!!errors.name"
+          :error-message="errors.name"
+        />
         <InputFormField
           id="email"
           label="Email"

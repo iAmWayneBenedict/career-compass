@@ -10,7 +10,7 @@ const props = defineProps<Props>()
 </script>
 
 <template>
-  <Button :as="RouterLink" v-bind="props" :label="label" :to="props.to">
+  <Button :as="RouterLink" v-bind="props" :to="props.to">
     <template #icon v-if="$slots.icon">
       <slot name="icon" />
     </template>
