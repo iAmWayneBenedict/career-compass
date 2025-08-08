@@ -1,3 +1,7 @@
+<script setup lang="ts">
+import CustomLink from '../customs/CustomLink.vue'
+</script>
+
 <template>
   <div class="mt-5">
     <p class="text-xs text-center text-gray-500">
@@ -20,7 +24,3 @@
     </p>
   </div>
 </template>
-
-<script setup lang="ts">
-import CustomLink from '../customs/CustomLink.vue'
-</script>

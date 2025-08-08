@@ -1,3 +1,32 @@
+<script setup lang="ts">
+import InputText from 'primevue/inputtext'
+import Message from 'primevue/message'
+
+type Props = {
+  id: string
+  label?: string
+  modelValue: string
+  type?: string
+  placeholder?: string
+  hint?: string
+  hasError?: boolean
+  errorMessage?: string
+  disabled?: boolean
+}
+
+type Emits = {
+  'update:modelValue': [value: string]
+}
+
+withDefaults(defineProps<Props>(), {
+  type: 'text',
+  hasError: false,
+  disabled: false,
+})
+
+defineEmits<Emits>()
+</script>
+
 <template>
   <div class="flex flex-col">
     <label v-if="label" :for="id">{{ label }}</label>
@@ -33,32 +62,3 @@
     </Message>
   </div>
 </template>
-
-<script setup lang="ts">
-import InputText from 'primevue/inputtext'
-import Message from 'primevue/message'
-
-type Props = {
-  id: string
-  label?: string
-  modelValue: string
-  type?: string
-  placeholder?: string
-  hint?: string
-  hasError?: boolean
-  errorMessage?: string
-  disabled?: boolean
-}
-
-type Emits = {
-  'update:modelValue': [value: string]
-}
-
-withDefaults(defineProps<Props>(), {
-  type: 'text',
-  hasError: false,
-  disabled: false,
-})
-
-defineEmits<Emits>()
-</script>

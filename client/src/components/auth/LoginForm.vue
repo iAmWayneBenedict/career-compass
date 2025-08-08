@@ -1,29 +1,3 @@
-<template>
-  <div class="flex flex-col">
-    <AuthHeader :title="title" :subtitle="subtitle" />
-
-    <SocialLogin
-      v-if="socialProviders.length > 0"
-      :providers="socialProviders"
-      @social-login="$emit('socialLogin', $event)"
-    />
-
-    <FormDivider :text="dividerText" />
-
-    <form @submit.prevent="$emit('submit')" class="flex flex-col gap-5">
-      <slot name="fields" />
-
-      <div class="flex flex-col w-full gap-2">
-        <Button :label="submitLabel" :loading="loading" :disabled="disabled" type="submit" />
-
-        <slot name="additional-actions" />
-      </div>
-
-      <slot name="footer-links" />
-    </form>
-  </div>
-</template>
-
 <script setup lang="ts">
 import type { SocialProvider } from '@/types/auth'
 import AuthHeader from './AuthHeader.vue'
@@ -54,3 +28,29 @@ withDefaults(defineProps<Props>(), {
 
 defineEmits<Emits>()
 </script>
+
+<template>
+  <div class="flex flex-col">
+    <AuthHeader :title="title" :subtitle="subtitle" />
+
+    <SocialLogin
+      v-if="socialProviders.length > 0"
+      :providers="socialProviders"
+      @social-login="$emit('socialLogin', $event)"
+    />
+
+    <FormDivider :text="dividerText" />
+
+    <form @submit.prevent="$emit('submit')" class="flex flex-col gap-5">
+      <slot name="fields" />
+
+      <div class="flex flex-col w-full gap-2">
+        <Button :label="submitLabel" :loading="loading" :disabled="disabled" type="submit" />
+
+        <slot name="additional-actions" />
+      </div>
+
+      <slot name="footer-links" />
+    </form>
+  </div>
+</template>
