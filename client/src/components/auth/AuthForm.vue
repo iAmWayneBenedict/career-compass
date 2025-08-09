@@ -9,6 +9,7 @@ type Props = {
   title: string
   subtitle?: string
   submitLabel: string
+  showDivider?: boolean
   loading?: boolean
   disabled?: boolean
   socialProviders?: SocialProvider[]
@@ -23,6 +24,7 @@ type Emits = {
 withDefaults(defineProps<Props>(), {
   loading: false,
   disabled: false,
+  showDivider: true,
   socialProviders: () => [],
   dividerText: '',
 })
@@ -39,11 +41,12 @@ defineEmits<Emits>()
       @social-login="$emit('socialLogin', $event)"
     />
 
-    <FormDivider :text="dividerText" />
+    <FormDivider :text="dividerText" v-if="showDivider" />
 
     <form @submit.prevent="$emit('submit')" class="flex flex-col gap-5">
       <slot name="fields" />
 
+      <slot name="password-actions" />
       <div class="flex flex-col w-full gap-2">
         <Button :label="submitLabel" :loading="loading" :disabled="disabled" type="submit" />
 

@@ -2,6 +2,7 @@
 import AuthFooterLinks from '@/components/auth/AuthFooterLinks.vue'
 import AuthForm from '@/components/auth/AuthForm.vue'
 import AuthLayout from '@/components/auth/AuthLayout.vue'
+import ShowPasswordToggle from '@/components/auth/ShowPasswordToggle.vue'
 import InputFormField from '@/components/common/InputFormField.vue'
 import GoogleIcon from '@/components/icons/GoogleIcon.vue'
 import type { SocialProvider } from '@/types/auth'
@@ -11,15 +12,18 @@ const form = reactive({
   name: '',
   email: '',
   password: '',
+  confirmPassword: '',
 })
 
 const errors = reactive({
   name: '',
   email: '',
   password: '',
+  confirmPassword: '',
 })
 
 const isLoading = ref(false)
+const showPassword = ref(false)
 
 const socialProviders: SocialProvider[] = [
   {
@@ -81,12 +85,26 @@ const handleSocialLogin = (provider: string) => {
         <InputFormField
           id="password"
           label="Password"
-          type="password"
           v-model="form.password"
           placeholder="●●●●●●●●"
+          :type="showPassword ? 'text' : 'password'"
           :has-error="!!errors.password"
           :error-message="errors.password"
         />
+        <InputFormField
+          id="confirm-password"
+          label="Confirm Password"
+          v-model="form.confirmPassword"
+          placeholder="●●●●●●●●"
+          :type="showPassword ? 'text' : 'password'"
+          :has-error="!!errors.confirmPassword"
+          :error-message="errors.confirmPassword"
+        />
+      </template>
+      <template #password-actions>
+        <div class="flex justify-between w-full">
+          <ShowPasswordToggle v-model:show-password="showPassword" />
+        </div>
       </template>
       <template #footer-links>
         <AuthFooterLinks :links="footerLinks" />

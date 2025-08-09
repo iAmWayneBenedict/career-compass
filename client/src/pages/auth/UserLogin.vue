@@ -6,11 +6,15 @@ import InputFormField from '@/components/common/InputFormField.vue'
 import GoogleIcon from '@/components/icons/GoogleIcon.vue'
 import type { SocialProvider } from '@/types/auth'
 import { reactive, ref } from 'vue'
+import Checkbox from 'primevue/checkbox'
+import ShowPasswordToggle from '@/components/auth/ShowPasswordToggle.vue'
 
 const form = reactive({
   email: '',
   password: '',
 })
+
+const showPassword = ref(false)
 
 const errors = reactive({
   email: '',
@@ -71,12 +75,20 @@ const handleSocialLogin = (provider: string) => {
         <InputFormField
           id="password"
           label="Password"
-          type="password"
+          :type="showPassword ? 'text' : 'password'"
           v-model="form.password"
           placeholder="●●●●●●●●"
           :has-error="!!errors.password"
           :error-message="errors.password"
         />
+      </template>
+      <template #password-actions>
+        <div class="flex justify-between w-full">
+          <ShowPasswordToggle :show-password="showPassword" />
+          <RouterLink to="/auth/forgot-password" class="text-sm text-gray-600 hover:underline">
+            Forgot Password?
+          </RouterLink>
+        </div>
       </template>
       <template #footer-links>
         <AuthFooterLinks :links="footerLinks" />
