@@ -84,7 +84,7 @@ const handleSocialLogin = (provider: string) => {
       </template>
       <template #password-actions>
         <div class="flex justify-between w-full">
-          <ShowPasswordToggle :show-password="showPassword" />
+          <ShowPasswordToggle v-model:show-password="showPassword" />
           <RouterLink to="/auth/forgot-password" class="text-sm text-gray-600 hover:underline">
             Forgot Password?
           </RouterLink>
