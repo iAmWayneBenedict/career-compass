@@ -16,6 +16,11 @@ const authRoutes: RouteRecordRaw[] = [
     name: 'forgot-password',
     component: () => import('@/pages/auth/ForgotPassword.vue'),
   },
+  {
+    path: 'otp-verification',
+    name: 'otp-verification',
+    component: () => import('@/pages/auth/OTPVerification.vue'),
+  },
 ]
 
 export default authRoutes

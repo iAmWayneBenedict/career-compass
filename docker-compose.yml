@@ -1,0 +1,71 @@
+services:
+    # Laravel API
+    server:
+        build:
+            context: ./server
+            dockerfile: Dockerfile
+        container_name: career_compass_api
+        ports:
+            - "8000:8000"
+        volumes:
+            - ./server:/var/www/html
+        develop:
+            watch:
+                - action: sync
+                  path: ./server
+                  target: /var/www/html
+                  ignore:
+                      - vendor/
+                      - node_modules/
+                - action: rebuild
+                  path: ./server/composer.json
+        depends_on:
+            mysql:
+                condition: service_healthy
+        env_file:
+            - ./server/.env
+        command: sh -c "php artisan migrate && php artisan serve --host=0.0.0.0 --port=8000"
+
+    # Vue frontend
+    client:
+        build:
+            context: ./client
+            dockerfile: Dockerfile
+        container_name: career_compass_client
+        ports:
+            - "5173:5173"
+        volumes:
+            - ./client:/app
+            - /app/node_modules
+        develop:
+            watch:
+                - action: sync
+                  path: ./client
+                  target: /app
+                  ignore:
+                      - node_modules/
+                - action: rebuild
+                  path: ./client/package.json
+        command: sh -c "npm install && npm run dev -- --host"
+
+    # MySQL
+    mysql:
+        image: mysql:8-oracle
+        container_name: mysql_db
+        restart: always
+        environment:
+            MYSQL_ROOT_PASSWORD: root
+            MYSQL_DATABASE: career_compass
+            MYSQL_PASSWORD: root
+        ports:
+            - "3306:3306"
+        volumes:
+            - mysql_data:/var/lib/mysql
+        healthcheck:
+            test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-uroot", "-proot"]
+            interval: 5s
+            retries: 10
+            start_period: 5s
+
+volumes:
+    mysql_data:

@@ -4,7 +4,7 @@ const homeRoutes: RouteRecordRaw[] = [
   {
     path: '',
     name: 'home',
-    component: () => import('@/pages/Home.vue'),
+    component: () => import('@/pages/AppHome.vue'),
     meta: {
       title: 'Career Compass',
       description: 'Career Compass',
