@@ -115,6 +115,8 @@ return [
 
     "limiters" => [
         "login" => "login",
+        "api" => "api",
+        "register" => "register",
         "two-factor" => "two-factor",
     ],
 
@@ -144,10 +146,10 @@ return [
 
     "features" => [
         Features::registration(),
-        // Features::resetPasswords(),
-        // Features::emailVerification(),
-        // Features::updateProfileInformation(),
-        // Features::updatePasswords(),
+        Features::resetPasswords(),
+        Features::emailVerification(),
+        Features::updateProfileInformation(),
+        Features::updatePasswords(),
         // Features::twoFactorAuthentication([
         //     'confirm' => true,
         //     'confirmPassword' => true,
