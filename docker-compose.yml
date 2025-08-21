@@ -26,6 +26,22 @@ services:
             - ./server/.env
         command: sh -c "php artisan migrate && php artisan serve --host=0.0.0.0 --port=8000"
 
+    # Laravel Queue Worker
+    queue-worker:
+        build:
+            context: ./server
+            dockerfile: Dockerfile
+        container_name: career_compass_queue
+        volumes:
+            - ./server:/var/www/html
+        depends_on:
+            mysql:
+                condition: service_healthy
+        env_file:
+            - ./server/.env
+        command: sh -c "php artisan queue:work --verbose --tries=3 --timeout=90"
+        restart: unless-stopped
+
     # Vue frontend
     client:
         build:
