@@ -7,6 +7,8 @@ services:
         container_name: career_compass_api
         ports:
             - "8000:8000"
+        networks:
+            - career_compass_network
         volumes:
             - ./server:/var/www/html
         develop:
@@ -24,7 +26,7 @@ services:
                 condition: service_healthy
         env_file:
             - ./server/.env
-        command: sh -c "php artisan migrate && php artisan serve --host=0.0.0.0 --port=8000"
+        command: sh -c "until php artisan db:show 2>/dev/null; do echo 'Waiting for database connection...'; sleep 2; done && php artisan migrate && php artisan serve --host=0.0.0.0 --port=8000"
 
     # Laravel Queue Worker
     queue-worker:
@@ -32,6 +34,8 @@ services:
             context: ./server
             dockerfile: Dockerfile
         container_name: career_compass_queue
+        networks:
+            - career_compass_network
         volumes:
             - ./server:/var/www/html
         depends_on:
@@ -39,7 +43,7 @@ services:
                 condition: service_healthy
         env_file:
             - ./server/.env
-        command: sh -c "php artisan queue:work --verbose --tries=3 --timeout=90"
+        command: sh -c "until php artisan db:show 2>/dev/null; do echo 'Waiting for database connection...'; sleep 2; done && php artisan queue:work --verbose --tries=3 --timeout=90"
         restart: unless-stopped
 
     # Vue frontend
@@ -48,6 +52,8 @@ services:
             context: ./client
             dockerfile: Dockerfile
         container_name: career_compass_client
+        networks:
+            - career_compass_network
         ports:
             - "5173:5173"
         volumes:
@@ -69,6 +75,8 @@ services:
         image: mysql:8-oracle
         container_name: mysql_db
         restart: always
+        networks:
+            - career_compass_network
         environment:
             MYSQL_ROOT_PASSWORD: root
             MYSQL_DATABASE: career_compass
@@ -85,3 +93,7 @@ services:
 
 volumes:
     mysql_data:
+
+networks:
+    career_compass_network:
+        driver: bridge

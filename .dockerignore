@@ -15,6 +15,7 @@ npm-debug.log
 /storage/*.key
 /vendor
 .env.backup
+.env.local
 .phpunit.result.cache
 Homestead.json
 Homestead.yaml
