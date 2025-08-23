@@ -13,11 +13,8 @@
     
     <div style="text-align: center; margin: 30px 0;">
         <div style="background: #f7fafc; border: 2px solid #38a169; border-radius: 12px; padding: 25px; display: inline-block; font-family: 'Courier New', monospace;">
-            <div style="font-size: 32px; font-weight: bold; color: #2d3748; letter-spacing: 8px; margin-bottom: 10px;">
+            <div style="font-size: 32px; font-weight: bold; color: #2d3748; letter-spacing: 8px;">
                 {{ $otp }}
-            </div>
-            <div style="font-size: 14px; color: #718096;">
-                Valid for {{ $expiryMinutes ?? 10 }} minutes
             </div>
         </div>
     </div>

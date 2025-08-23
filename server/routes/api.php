@@ -96,3 +96,12 @@ Route::prefix('v1')->group(function () {
         });
     });
 });
+Route::get('/db-config', function () {
+    return [
+        'host' => config('database.connections.mysql.host'),
+        'port' => config('database.connections.mysql.port'),
+        'database' => config('database.connections.mysql.database'),
+        'username' => config('database.connections.mysql.username'),
+        'driver' => config('database.connections.mysql.driver'),
+    ];
+});
