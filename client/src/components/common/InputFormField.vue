@@ -1,16 +1,17 @@
 <script setup lang="ts">
+import { Textarea } from 'primevue'
 import InputText from 'primevue/inputtext'
 import Message from 'primevue/message'
+import { useField } from 'vee-validate'
+import { watch } from 'vue'
 
 type Props = {
   id: string
+  name: string
   label?: string
-  modelValue: string
   type?: string
   placeholder?: string
   hint?: string
-  hasError?: boolean
-  errorMessage?: string
   disabled?: boolean
 }
 
@@ -18,13 +19,15 @@ type Emits = {
   'update:modelValue': [value: string]
 }
 
-withDefaults(defineProps<Props>(), {
+const props = withDefaults(defineProps<Props>(), {
   type: 'text',
   hasError: false,
   disabled: false,
 })
 
 defineEmits<Emits>()
+
+const { value, errorMessage } = useField<string>(() => props.name)
 </script>
 
 <template>
@@ -36,28 +39,38 @@ defineEmits<Emits>()
       :id="id"
       :type="type"
       :placeholder="placeholder"
-      :model-value="modelValue"
+      v-model="value"
       :disabled="disabled"
       :aria-describedby="`${id}-help`"
-      @update:model-value="$emit('update:modelValue', $event!)"
+      :invalid="!!errorMessage"
     />
 
-    <textarea
+    <Textarea
       v-else
       :id="id"
       :placeholder="placeholder"
-      :model-value="modelValue"
+      v-model="value"
+      :disabled="disabled"
+      :aria-describedby="`${id}-help`"
+      class="p-3 border rounded-md"
+    />
+
+    <!-- <textarea
+      v-else
+      :id="id"
+      :placeholder="placeholder"
+      :model-value="value"
       :disabled="disabled"
       :aria-describedby="`${id}-help`"
       class="p-3 border rounded-md"
       @input="$emit('update:modelValue', ($event.target as HTMLTextAreaElement).value)"
-    />
+    /> -->
 
-    <small v-if="hint && !hasError" class="mt-1 text-xs text-gray-500">
+    <small v-if="hint && !errorMessage" class="mt-1 text-xs text-gray-500">
       {{ hint }}
     </small>
 
-    <Message v-if="hasError && errorMessage" size="small" severity="error" variant="simple">
+    <Message v-if="errorMessage" size="small" severity="error" variant="simple">
       {{ errorMessage }}
     </Message>
   </div>

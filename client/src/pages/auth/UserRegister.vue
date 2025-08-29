@@ -6,20 +6,13 @@ import ShowPasswordToggle from '@/components/auth/ShowPasswordToggle.vue'
 import InputFormField from '@/components/common/InputFormField.vue'
 import GoogleIcon from '@/components/icons/GoogleIcon.vue'
 import type { SocialProvider } from '@/types/auth'
-import { reactive, ref } from 'vue'
+import { registerSchema } from '@/types/schema/auth-schema'
+import { toTypedSchema } from '@vee-validate/zod'
+import { useForm } from 'vee-validate'
+import { ref } from 'vue'
 
-const form = reactive({
-  name: '',
-  email: '',
-  password: '',
-  confirmPassword: '',
-})
-
-const errors = reactive({
-  name: '',
-  email: '',
-  password: '',
-  confirmPassword: '',
+const { handleSubmit } = useForm({
+  validationSchema: toTypedSchema(registerSchema),
 })
 
 const isLoading = ref(false)
@@ -41,10 +34,10 @@ const footerLinks = [
   },
 ]
 
-const handleLogin = () => {
+const onSubmit = handleSubmit((values) => {
   // TODO: Implement login logic
-  console.log('Login:', form)
-}
+  console.log(values)
+})
 
 const handleSocialLogin = (provider: string) => {
   // TODO: Implement social login
@@ -61,44 +54,26 @@ const handleSocialLogin = (provider: string) => {
       :loading="isLoading"
       :social-providers="socialProviders"
       divider-text="Or continue with"
-      @submit="handleLogin"
+      @submit="onSubmit"
       @social-login="handleSocialLogin"
     >
       <template #fields>
-        <InputFormField
-          id="name"
-          label="Name"
-          v-model="form.name"
-          placeholder="Example Name"
-          :has-error="!!errors.name"
-          :error-message="errors.name"
-        />
-        <InputFormField
-          id="email"
-          label="Email"
-          v-model="form.email"
-          placeholder="m@example.com"
-          :has-error="!!errors.email"
-          :error-message="errors.email"
-        />
+        <InputFormField name="name" id="name" label="Name" placeholder="Example Name" />
+        <InputFormField id="email" label="Email" name="email" placeholder="m@example.com" />
 
         <InputFormField
+          name="password"
           id="password"
           label="Password"
-          v-model="form.password"
           placeholder="●●●●●●●●"
           :type="showPassword ? 'text' : 'password'"
-          :has-error="!!errors.password"
-          :error-message="errors.password"
         />
         <InputFormField
+          name="confirmPassword"
           id="confirm-password"
           label="Confirm Password"
-          v-model="form.confirmPassword"
           placeholder="●●●●●●●●"
           :type="showPassword ? 'text' : 'password'"
-          :has-error="!!errors.confirmPassword"
-          :error-message="errors.confirmPassword"
         />
       </template>
       <template #password-actions>
