@@ -1,0 +1,28 @@
+commit_message:
+    conventional: true
+    max_length: 72
+    include_scope: true
+    include_body: true
+    template: |
+        {{type}}{{#scope}}({{scope}}){{/scope}}: {{subject}}
+        {{#body}}
+
+        {{body}}
+        {{/body}}
+        {{#footer}}
+
+        {{footer}}
+        {{/footer}}
+
+    rules:
+        - type_required: true
+        - subject_max_length: 50
+        - body_max_line_length: 72
+        - scope_enum:
+              - auth
+              - ui
+              - api
+              - db
+              - config
+              - docs
+              - test

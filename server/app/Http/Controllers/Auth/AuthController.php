@@ -20,7 +20,7 @@ class AuthController extends Controller
     public function socialLogin(string $provider): JsonResponse
     {
         $validProviders = ['google'];
-        
+
         if (!in_array($provider, $validProviders)) {
             return response()->json([
                 'error' => [
@@ -30,7 +30,7 @@ class AuthController extends Controller
                 'status' => 'error'
             ], 400);
         }
-        
+
         return response()->json([
             'redirect_url' => Socialite::driver($provider)->redirect()->getTargetUrl(),
             'status' => 'success'
@@ -44,10 +44,10 @@ class AuthController extends Controller
     {
         try {
             $socialUser = Socialite::driver($provider)->user();
-            
+
             // Find existing user or create new one
             $user = User::where('email', $socialUser->getEmail())->first();
-            
+
             if (!$user) {
                 $user = User::create([
                     'name' => $socialUser->getName(),
@@ -55,21 +55,20 @@ class AuthController extends Controller
                     'password' => Hash::make(\Illuminate\Support\Str::random(16)),
                     'email_verified_at' => now(),
                 ]);
-                
+
                 event(new Registered($user));
             }
-            
+
             Auth::login($user);
-            
+
             return response()->json([
                 'data' => $user,
                 'message' => 'Social login successful',
                 'status' => 'success'
             ]);
-            
         } catch (\Exception $e) {
             Log::error('Social login error: ' . $e->getMessage());
-            
+
             return response()->json([
                 'error' => [
                     'message' => 'Failed to authenticate with ' . $provider,
