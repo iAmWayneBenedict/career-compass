@@ -11,9 +11,11 @@ export const registerSchema = z
       .regex(/[A-Z]/, 'Password must contain at least one uppercase letter')
       .regex(/[a-z]/, 'Password must contain at least one lowercase letter')
       .regex(/[^A-Za-z0-9]/, 'Password must contain at least one special character'),
-    confirmPassword: z.string(),
+    password_confirmation: z.string(),
   })
-  .refine((data) => data.password === data.confirmPassword, {
+  .refine((data) => data.password === data.password_confirmation, {
     message: 'Passwords do not match',
-    path: ['confirmPassword'],
+    path: ['password_confirmation'],
   })
+
+export type RegisterType = z.infer<typeof registerSchema>

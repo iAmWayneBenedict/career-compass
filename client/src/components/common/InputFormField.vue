@@ -3,7 +3,6 @@ import { Textarea } from 'primevue'
 import InputText from 'primevue/inputtext'
 import Message from 'primevue/message'
 import { useField } from 'vee-validate'
-import { watch } from 'vue'
 
 type Props = {
   id: string
@@ -53,6 +52,7 @@ const { value, errorMessage } = useField<string>(() => props.name)
       :disabled="disabled"
       :aria-describedby="`${id}-help`"
       class="p-3 border rounded-md"
+      :invalid="!!errorMessage"
     />
 
     <!-- <textarea

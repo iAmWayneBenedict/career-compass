@@ -5,13 +5,14 @@ import AuthLayout from '@/components/auth/AuthLayout.vue'
 import ShowPasswordToggle from '@/components/auth/ShowPasswordToggle.vue'
 import InputFormField from '@/components/common/InputFormField.vue'
 import GoogleIcon from '@/components/icons/GoogleIcon.vue'
+import { useRegisterMutation } from '@/services/mutations'
 import type { SocialProvider } from '@/types/auth'
-import { registerSchema } from '@/types/schema/auth-schema'
+import { registerSchema, type RegisterType } from '@/types/schema/auth-schema'
 import { toTypedSchema } from '@vee-validate/zod'
 import { useForm } from 'vee-validate'
 import { ref } from 'vue'
 
-const { handleSubmit } = useForm({
+const { handleSubmit, setFieldError } = useForm({
   validationSchema: toTypedSchema(registerSchema),
 })
 
@@ -34,9 +35,16 @@ const footerLinks = [
   },
 ]
 
+const registerMutation = useRegisterMutation({
+  onError: (err: { errors: RegisterType; message: string }) => {
+    Object.entries(err.errors).map(([key, value]) => {
+      setFieldError(key as keyof RegisterType, value as string)
+    })
+  },
+})
+
 const onSubmit = handleSubmit((values) => {
-  // TODO: Implement login logic
-  console.log(values)
+  registerMutation.mutate(values)
 })
 
 const handleSocialLogin = (provider: string) => {
@@ -51,7 +59,7 @@ const handleSocialLogin = (provider: string) => {
       title="Welcome"
       subtitle="Register with your Google account"
       submit-label="Register"
-      :loading="isLoading"
+      :loading="registerMutation.isPending.value"
       :social-providers="socialProviders"
       divider-text="Or continue with"
       @submit="onSubmit"
@@ -69,7 +77,7 @@ const handleSocialLogin = (provider: string) => {
           :type="showPassword ? 'text' : 'password'"
         />
         <InputFormField
-          name="confirmPassword"
+          name="password_confirmation"
           id="confirm-password"
           label="Confirm Password"
           placeholder="●●●●●●●●"

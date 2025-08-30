@@ -16,4 +16,10 @@
     @apply !rounded-xl;
   }
   /* END - Input */
+
+  /* START - Toast */
+  .p-toast-message {
+    @apply !rounded-xl;
+  }
+  /* END - Toast */
 }

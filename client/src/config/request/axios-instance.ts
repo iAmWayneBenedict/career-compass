@@ -8,18 +8,36 @@ const CSRF_REQUEST_URL = envConfig.SERVER_URL + '/sanctum/csrf-cookie'
 // Set config defaults when creating the instance
 const axiosInstance = axios.create({
   baseURL: envConfig.API_URL,
+  withCredentials: true,
+  headers: {
+    'Content-Type': 'application/json',
+    Accept: 'application/json',
+  },
 })
 
 axiosInstance.interceptors.request.use(
   async (config) => {
-    // add config here before the request is sent
-
-    const needsCsrf = CSRF_METHODS.includes(config.method || 'GET')
-
+    const needsCsrf = CSRF_METHODS.includes(config.method?.toUpperCase() || 'GET')
+    console.log('needsCsrf', needsCsrf)
     if (needsCsrf) {
+      // Extract CSRF token from cookies
+      const csrfToken = document.cookie
+        .split('; ')
+        .find((row) => row.startsWith('XSRF-TOKEN='))
+        ?.split('=')[1]
+
+      // if (!csrfToken) {
+      // Get CSRF cookie first
       await axios.get(CSRF_REQUEST_URL, {
         withCredentials: true,
       })
+      // }
+
+      if (csrfToken) {
+        // Decode the token (Laravel encodes it)
+        const decodedToken = decodeURIComponent(csrfToken)
+        config.headers['X-XSRF-TOKEN'] = decodedToken
+      }
     }
 
     return config

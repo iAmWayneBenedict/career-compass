@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { RouterView } from 'vue-router'
+import Toast from 'primevue/toast'
 import './styles/index.css'
 </script>
 
@@ -7,6 +8,7 @@ import './styles/index.css'
   <div id="app">
     <main>
       <RouterView />
+      <Toast />
     </main>
   </div>
 </template>

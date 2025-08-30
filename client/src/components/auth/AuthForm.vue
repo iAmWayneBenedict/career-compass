@@ -48,7 +48,12 @@ defineEmits<Emits>()
 
       <slot name="password-actions" />
       <div class="flex flex-col w-full gap-2">
-        <Button :label="submitLabel" :loading="loading" :disabled="disabled" type="submit" />
+        <Button
+          :label="submitLabel"
+          :loading="loading"
+          :disabled="disabled || loading"
+          type="submit"
+        />
 
         <slot name="additional-actions" />
       </div>
